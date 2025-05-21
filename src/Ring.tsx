@@ -20,9 +20,11 @@ const Ring: React.FC = () => {
           No
         </button>
       </div>
+
       {response && (
         <p className="mt-4 text-lg font-semibold">
-          You said: {response.toUpperCase()} ❤️
+          {response.toUpperCase() === "YES" && "IHANAA OLLAAN NAIMISISSA ❤️"}
+          {response.toUpperCase() === "NO" && "VÄÄRÄ VASTAUS 😡"}
         </p>
       )}
     </div>
