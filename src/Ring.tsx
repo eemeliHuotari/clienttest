@@ -5,7 +5,7 @@ const Ring: React.FC = () => {
 
   return (
     <div className="p-4 text-center">
-      <h2 className="text-2xl mb-4">💍 Will you marry me?</h2>
+      <h2 className="text-2xl mb-4">💍 Tuletko vaimokseni?</h2>
       <div className="space-x-4">
         <button
           className="bg-green-400 text-white px-4 py-2 rounded"
