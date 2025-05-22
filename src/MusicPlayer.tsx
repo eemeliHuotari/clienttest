@@ -1,4 +1,6 @@
 import { useState } from "react";
+import axios from 'axios';
+import { API_BASE } from './config';
 
 interface Track {
   file: File;
