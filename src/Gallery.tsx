@@ -41,7 +41,7 @@ const Gallery: React.FC = () => {
     formData.append('image', file); // Assuming your backend expects 'image' field
 
     try {
-      await axios.post(`${API_BASE}/upload/image/`, formData, {
+      await axios.post(`${API_BASE}/api/upload/image/`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setFile(null);
