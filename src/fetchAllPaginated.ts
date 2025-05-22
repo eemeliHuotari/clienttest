@@ -2,25 +2,16 @@ import axios from 'axios';
 import { API_BASE } from './config';
 
 export async function fetchAllPaginated<T>(endpoint: string): Promise<T[]> {
+    // Fetch all paginated data from the given endpoint
+    // and return the results as an array of generic type T.
   let results: T[] = [];
-  let url: string | null = endpoint;
+  let url = `${endpoint}`;
 
   while (url) {
-    // Only prepend API_BASE if the URL is not absolute
-    const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
-
-    const res = await axios.get(fullUrl);
+    const res = await axios.get(`${API_BASE}${url}`);
     const data = res.data;
-
     results = [...results, ...(data.results || data)];
-
-    // Normalize `next` to a relative path
-    if (data.next?.startsWith('http')) {
-      const parsed = new URL(data.next);
-      url = parsed.pathname + parsed.search;
-    } else {
-      url = data.next || null;
-    }
+    url = data.next ? data.next.replace('https://helionmunvaimo.2.rahtiapp.fi', '') : '';
   }
 
   return results;
