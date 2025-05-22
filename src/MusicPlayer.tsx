@@ -5,7 +5,7 @@ interface Track {
   id: number;
   title: string;
   artist: string;
-  audio_file: string; // URL
+  audio_file: string;
 }
 
 const MusicPlayer: React.FC = () => {
@@ -13,28 +13,70 @@ const MusicPlayer: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    const loadTracks = async () => {
-      try {
-        const data = await fetchAllPaginated<Track>(`/api/audios/`);
-        setTracks(data);
-      } catch (err) {
-        setError('Failed to load music.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadTracks();
   }, []);
+
+  const loadTracks = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAllPaginated<Track>(`/api/audios/`);
+      setTracks(data);
+    } catch (err) {
+      setError('Failed to load music.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append('audio', file); // assuming 'audio' is the field expected by your Django view
+
+    try {
+      await axios.post(`/upload/audio/`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setFile(null);
+      await loadTracks(); // refresh list
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('Audio upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h2 className="text-2xl font-bold mb-4 text-center">Music Player</h2>
+
+      <div className="mb-6 border p-4 rounded shadow">
+        <h3 className="text-lg font-semibold mb-2">Upload New Track</h3>
+        <input
+          type="file"
+          accept="audio/*"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          className="mb-2"
+        />
+        <button
+          onClick={handleUpload}
+          disabled={!file || uploading}
+          className="px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
+        >
+          {uploading ? 'Uploading...' : 'Upload'}
+        </button>
+      </div>
+
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
@@ -56,7 +98,9 @@ const MusicPlayer: React.FC = () => {
           </ul>
           {currentTrack && (
             <div className="mt-6">
-              <p className="text-center font-semibold mb-2">Now Playing: {currentTrack.artist} - {currentTrack.title}</p>
+              <p className="text-center font-semibold mb-2">
+                Now Playing: {currentTrack.artist} - {currentTrack.title}
+              </p>
               <audio controls autoPlay className="w-full">
                 <source src={currentTrack.audio_file} type="audio/mpeg" />
                 Your browser does not support the audio element.
