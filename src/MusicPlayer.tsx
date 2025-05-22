@@ -43,7 +43,7 @@ const MusicPlayer: React.FC = () => {
     formData.append('audio', file); // assuming 'audio' is the field expected by your Django view
 
     try {
-      await axios.post(`${API_BASE}/upload/audio/`, formData, {
+      await axios.post(`${API_BASE}/api/upload/audio/`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setFile(null);
