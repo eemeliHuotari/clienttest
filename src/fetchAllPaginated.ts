@@ -6,7 +6,7 @@ export async function fetchAllPaginated<T>(endpoint: string): Promise<T[]> {
   let url: string | null = endpoint;
 
   while (url) {
-    // ✅ Only prepend API_BASE if the URL is not already absolute
+    // Only prepend API_BASE if the URL is not absolute
     const fullUrl = url.startsWith('http') ? url : `${API_BASE}${url}`;
 
     const res = await axios.get(fullUrl);
@@ -14,7 +14,7 @@ export async function fetchAllPaginated<T>(endpoint: string): Promise<T[]> {
 
     results = [...results, ...(data.results || data)];
 
-    // ✅ If `data.next` is absolute, convert to relative to avoid re-prepending
+    // Normalize `next` to a relative path
     if (data.next?.startsWith('http')) {
       const parsed = new URL(data.next);
       url = parsed.pathname + parsed.search;
@@ -24,3 +24,4 @@ export async function fetchAllPaginated<T>(endpoint: string): Promise<T[]> {
   }
 
   return results;
+}
