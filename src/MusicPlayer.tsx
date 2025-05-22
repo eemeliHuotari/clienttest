@@ -17,7 +17,7 @@ const MusicPlayer: React.FC = () => {
   useEffect(() => {
     const loadTracks = async () => {
       try {
-        const data = await fetchAllPaginated<Track>(`/api/music/`);
+        const data = await fetchAllPaginated<Track>(`/api/audios/`);
         setTracks(data);
       } catch (err) {
         setError('Failed to load music.');
