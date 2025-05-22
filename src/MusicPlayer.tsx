@@ -40,7 +40,7 @@ const MusicPlayer: React.FC = () => {
     setUploading(true);
 
     const formData = new FormData();
-    formData.append('audio', file); // assuming 'audio' is the field expected by your Django view
+    formData.append('file', file); // assuming 'audio' is the field expected by your Django view
 
     try {
       await axios.post(`${API_BASE}/api/upload/audio/`, formData, {
