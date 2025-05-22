@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { API_BASE } from './config';
 import { fetchAllPaginated } from './fetchAllPaginated';
 
 interface Track {
