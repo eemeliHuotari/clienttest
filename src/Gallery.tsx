@@ -16,7 +16,7 @@ const Gallery: React.FC = () => {
   useEffect(() => {
     const loadImages = async () => {
       try {
-        const data = await fetchAllPaginated<Image>(`${API_BASE}/api/images/`);
+        const data = await fetchAllPaginated<Image>(`/api/images/`);
         setImages(data);
       } catch (err) {
         setError('Failed to load images.');
