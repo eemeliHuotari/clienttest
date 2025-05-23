@@ -84,7 +84,7 @@ const Gallery: React.FC = () => {
           {images.map((img) => (
             <div key={img.id} className="rounded overflow-hidden shadow">
               <img
-                src={img.image}
+                src={`${API_BASE}${img.image}`}
                 alt={img.title || 'Uploaded image'}
                 className="w-full h-48 object-cover"
               />
